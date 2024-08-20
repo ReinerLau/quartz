@@ -3,8 +3,6 @@ title: async
 tags:
   - html
 ---
-# async
-
 ## 定义
 
 - **属性**：是一种标签属性
