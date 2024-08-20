@@ -3,8 +3,6 @@ tags:
   - html
 title: defer
 ---
-# defer
-
 ## 定义
 
 - **属性**：是一种标签属性
