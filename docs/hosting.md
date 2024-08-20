@@ -208,7 +208,7 @@ build:
     paths:
       - public
   tags:
-    - gitlab-org-docker
+    - docker
 
 pages:
   stage: deploy

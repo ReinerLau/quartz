@@ -46,13 +46,11 @@ export const PageList: QuartzComponent = ({ cfg, fileData, allFiles, limit, sort
         return (
           <li class="section-li">
             <div class="section">
-              <div>
-                {page.dates && (
-                  <p class="meta">
-                    <Date date={getDate(cfg, page)!} locale={cfg.locale} />
-                  </p>
-                )}
-              </div>
+              {page.dates && (
+                <p class="meta">
+                  <Date date={getDate(cfg, page)!} locale={cfg.locale} />
+                </p>
+              )}
               <div class="desc">
                 <h3>
                   <a href={resolveRelative(fileData.slug!, page.slug!)} class="internal">
