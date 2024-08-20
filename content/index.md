@@ -1,7 +1,6 @@
 ---
 title: 欢迎光临
-tags:
-  - test
+tags: []
 ---
 这里是 Reiner Lau 的数字花园
 
