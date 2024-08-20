@@ -1,18 +1,95 @@
-# Quartz v4
+# 该博客是怎么炼成的
 
-> “[One] who works with the door open gets all kinds of interruptions, but [they] also occasionally gets clues as to what the world is and what might be important.” — Richard Hamming
+## 初始化
 
-Quartz is a set of tools that helps you publish your [digital garden](https://jzhao.xyz/posts/networked-thought) and notes as a website for free.
-Quartz v4 features a from-the-ground rewrite focusing on end-user extensibility and ease-of-use.
+克隆 Quartz 仓库
 
-🔗 Read the documentation and get started: https://quartz.jzhao.xyz/
+```shell
+git clone https://github.com/jackyzha0/quartz.git
+```
 
-[Join the Discord Community](https://discord.gg/cRFFHYye7t)
+把 `quartz` 文件夹名改成自己想要的名字比如 `blog`
 
-## Sponsors
+安装依赖（用淘宝镜像，否则贼慢）
 
-<p align="center">
-  <a href="https://github.com/sponsors/jackyzha0">
-    <img src="https://cdn.jsdelivr.net/gh/jackyzha0/jackyzha0/sponsorkit/sponsors.svg" />
-  </a>
-</p>
+```shell
+npm install
+```
+
+初始化 Quartz
+
+```shell
+npx quartz create
+```
+
+分别选择 `Empty Quartz` 和 `Treat links as shortest path`
+
+然后运行在 http://localhost:8080 预览
+
+```shell
+npx quartz build --serve
+```
+
+## 部署
+
+先删除克隆项目的 `.git` 目录
+
+推送代码到自己的仓库上
+
+创建 `.github/workflows/deploy.yml`
+
+```yml
+name: Deploy Quartz site to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for git info
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Dependencies
+        run: npm ci
+      - name: Build Quartz
+        run: npx quartz build
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+```
+
+仓库进入 `Settings - Pages - Source` 设置为 `Github Action`
+
+现在推送代码就能自动部署到 Github Page 上
+
+## 使用 Obsidian 编辑
+
+直接用 Obsidian 打开项目下的 `content` 目录即可
