@@ -1,10 +1,10 @@
 ---
-title: Welcome to Quartz
+title: 欢迎光临
 tags:
   - test
 ---
+这里是 Reiner Lau 的数字花园
 
-This is a blank Quartz installation.
-See the [documentation](https://quartz.jzhao.xyz) for how to get started.
+首页还在建设中。。。
 
-# 首页
+请随意参观
