@@ -199,4 +199,73 @@ function myPlugin(): Plugin {
 - 如果请求地址不是 `/sprite.svg`，就使用 `next()` 跳过，跳到下一个中间件 
 - 将 `getSpriteContent` 得到的内容作为文件响应
 
-But if files in `src/icons` are changed, deleted, or added, we should restart the server to generate new sprite content via `getSpriteContent`; for this, I will use file watching library - [chokidar](https://github.com/paulmillr/chokidar?ref=hackernoon.com). Let’s add chokidar handlers to the code
+现在如果 `src/icons` 中的文件发生修改，删除或者新增，我们需要重启开发服务器才能重新执行 `getSpriteContent` 生成雪碧图，为了解决这个问题，使用 [chokidar](https://github.com/paulmillr/chokidar?ref=hackernoon.com)
+
+```ts
+import { Plugin, ResolvedConfig } from 'vite';
+import chokidar from 'chokidar';
+
+function myPlugin(): Plugin {
+  let config: ResolvedConfig;
+  let watcher: chokidar.FSWatcher; 
+
+  return {
+    name: `my-plugin:serve`,
+    apply: 'serve',
+    async configResolved(_config) {
+      config = _config;
+    },
+    configureServer(server) {
+	  function reloadPage() {
+        server.ws.send({ type: 'full-reload', path: '*' });
+      }
+
+      watcher = chokidar
+        .watch('src/icons/*.svg', {
+          cwd: config.root,
+          ignoreInitial: true,
+        })
+        .on('add', reloadPage)
+        .on('change', reloadPage)
+        .on('unlink', reloadPage); 
+
+      return () => {
+        server.middlewares.use(async (req, res, next) => {
+          if (req.url !== '/sprite.svg') {
+            return next();
+          }
+          const sprite = getSpriteContent({ pattern, prefix, svgo, currentColor });
+          res.writeHead(200, {
+            'Content-Type': 'image/svg+xml, charset=utf-8',
+            'Cache-Control': 'no-cache',
+          });
+          res.end(sprite);
+        });
+      };
+    },
+  };
+}
+```
+
+正如你所见，插件的创建并不复杂，你只需要从 Vite 或者 Rollup 中找到符合需求的钩子，比如在这个示例中，使用了来自 rollup 的 `writeBundle` 和来自 vite 的 `configureServe`，因为 rollup 不支持开发环境
+
+示例中的 `writeBundel` 非常简单，拿到雪碧图内容并放进文件中，按理说在开发环境下也能实现相同的功能，我看了一下其他开发者写的插件，他们也是用服务器中间件处理的，使用 `configureServer` 的 `server` 参数，添加中间件拦截所有对开发服务器 `sprite.svg` 的请求
+
+## 钩子
+
+前面提到过，想要创建更复杂的插件，你需要浏览一下其他钩子，这些钩子都在文档中都有描述，分为[通用钩子](https://vitejs.dev/guide/api-plugin?ref=hackernoon.com#universal-hooks)和[vite 特定钩子](https://vitejs.dev/guide/api-plugin?ref=hackernoon.com#vite-specific-hooks)
+
+## 命名
+
+在插件的命名方面，vite 提供了一些规范：
+
+- 需要带有 `vite-plugin-` 的前缀
+- package.json 中包括 `vite-plugin` 关键字
+- 在插件介绍中解释为什么这是只适用于 vite 的插件
+- 如果插件只适用于特定框架，包括前缀中添加，比如 `vite-plugin-vue-`, `vite-plugin-react-`, `vite-plugin-svelte-`
+
+## 发布
+
+如果你绝对发布插件到 npm 仓库上，我推荐
+
+If you decide to publish your plugin in NPM, which I recommend because sharing knowledge and expertise is a fundamental principle of the IT community, fostering collective growth. To learn how to publish and maintain your package, check out my guide → [The easiest way to create an NPM package](https://hackernoon.com/the-easiest-way-to-create-your-first-npm-package?ref=hackernoon.com).
