@@ -16,7 +16,7 @@ tags:
 
 `microbundle` 基于 rollup 构建，如果你有更复杂的库需要构建，也许需要考虑使用纯粹的 rollup 配置, 文章下面会提及
 
-## 初始化包
+## 初始化
 
 作为示例，创建一个简单的库，这个库只会导出一个 `sum` 函数，这个函数实现两个数相加的功能
 
@@ -43,7 +43,7 @@ pnpm add --save-dev microbundle
   "type": "module",
   "source": "src/index.ts", // your source code
   "exports": {
-		"types": "./dist/index.d.ts", // TypeScript declaration file
+	"types": "./dist/index.d.ts", // TypeScript declaration file
     "require": "./dist/index.cjs", // CommonJS entry point
     "default": "./dist/index.esm.js" // ES Module entry point
   },
@@ -90,7 +90,7 @@ pnpm build
 
 这样我们就创建了第一个包, 下面看一下更复杂的场景
 
-## 添加 React 到你的包中
+## React
 
 如果你想把 react 带进你的包中, 你可以继续使用 `microbundle` , 但现在你的构建命令需要变成这样:
 
@@ -108,11 +108,11 @@ microbundle --jsx React.createElement --jsxFragment React.Fragment --jsxImportSo
 ...
 ```
 
-## 使用 Storybook 作为 UI 组件
+## Storybook
 
-构建一个 UI 库时, 你也许需要一个沙盒环境来开发并预览组件, 同时在文档中提供一些示例组件
+构建一个 UI 库时, 你也许需要一个环境预览组件, 同时在文档中提供一些示例组件
 
-storybook 是一个带有便捷接口和构建器的沙盒, 在这里你可以很方便地描述你的组件, 每个组件状态的快照就叫做 story
+storybook 就是提供这种环境的工具, 在这里你可以很方便地描述你的组件
 
 在库中安装 storybook
 
@@ -122,7 +122,7 @@ npx storybook@latest init
 
 这个命令会安装所有 storybook 需要的依赖并添加运行的脚本, 创建一个 `.storybook` 文件存放默认配置, 同时添加一些 story 示例到 `src/stories` 目录下
 
-## 集成样式到库中
+## 样式
 
 有两种定义样式的方式: 
 
@@ -197,7 +197,7 @@ export const MySuperComponent = () => {
 
 以上两种方式选择适合项目的, 通常我会更喜欢 css 文件因为这允许用户自定义元素样式且不会影响打包体积, 运行速度更快
 
-## 写一个详细的 README 文件
+## README
 
 README.md 文件提供关于库的信息, 包括库的安装, 基础用法, 拥有的功能特性, 这通常是开发者找到你的仓库或 npm 包时第一个要看的文件, 所以这个文件需要精炼简洁
 
@@ -218,7 +218,7 @@ README.md 文件提供关于库的信息, 包括库的安装, 基础用法, 拥�
 
 这是一个很重要的部分因为如果你做法错误, 用户可能会面临版本冲突或者其他问题, 他们可能会选择移除你的库, 所以, 来看一下不同类型依赖的主要区别:
 
-- `devDependencies` 指定的依赖只用于开发时需要, 不会打包进打包文件的依赖, 比如如果你安装了 `microbundle` 包, 这个包用户不需要, 就把它放到 `devDependencies` 下, 它不会出现在打包文件中
+- `devDependencies` 指定的依赖只用于开发时需要, 不会打包进打包文件, 比如如果你安装了 `microbundle` 包, 这个包用户不需要, 就把它放到 `devDependencies` 下, 它不会出现在打包文件中
 -  `dependencies` 的依赖会跟随包一起安装, 包括那些会在用户项目中运行的依赖, 但比如 react, 这种用户可能已经安装的依赖, 在安装包后又重复安装了一遍会增加打包体积, 这就是为什么 `peerDependencies` 存在的原因
 - `peerDenpendecies` 的依赖会在用户项目中运行, 但不会出现在包的打包文件中, 你的包会统一用户项目中存在的依赖版本, 又叫对等依赖
 
@@ -226,13 +226,13 @@ README.md 文件提供关于库的信息, 包括库的安装, 基础用法, 拥�
 
 如果用户的项目中没有指定的对等依赖, `npm install` 会提示警告但不会自动安装其对等依赖
 
-## 为包使用 Github
+## Github
 
 如果你在发布一个 npm 包, 这意味着这个包可以被公共访问 (如果你是免费账户), 从用户收集反馈, 你可以为你的源码创建一个 github 仓库, 用户会在那里创建 issues 和你展开关于包的交流, 你也可以展示发布信息和获取一些小星星
 
 你可以跳过这一步, 但在贡献开源的开发者文化中是不可或缺的一部分
 
-## 发布并维护包
+## 发布
 
 在发布你的包之前, 保证你的 package.json 文件已经适当地进行了配置这一点十分重要
 
@@ -308,3 +308,13 @@ npm version patch
 正如你所写, 创建属于自己的库并不难, 上面那些都是你创建并维护包所需要的东西, 如果你在开发时使用 mircobundle 时觉得有诸多限制, 推荐使用提供更多配置的 rollup
 
 创建 npm 包并贡献到开源社区对提升开发者各种技能来说都是一件有价值的事情, 获取经验的同时也丰富了你的作品集
+
+## 拓展
+
+如果发布包后需要反悔，比如版本号错误，手贱等等，可以使用 `npm unpublish` 命令删除指定版本或整个包
+
+```sh
+npm unpublish [<pkg>][@<version>] --force
+```
+
+要注意删除包后，24小时内无法再上传同名的包
