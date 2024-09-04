@@ -4,6 +4,15 @@ tags:
   - 工程化
   - 测试
 ---
+## 相比 Jest
+
+可以作为 [[Jest 入门|Jest]] 的平替
+
+- 可以复用 vite 的配置
+- 原生支持 ESM、TypeScript 和 JSX
+- 同时兼容 chai 和 jest 的 api
+- 支持热更新, 提升速度更快
+
 ## 安装
 
 ```shell
