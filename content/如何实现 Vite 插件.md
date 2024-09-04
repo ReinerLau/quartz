@@ -266,7 +266,7 @@ function myPlugin(): Plugin {
 
 ## 发布
 
-推荐你发布插件到 npm 仓库上，因为这是分享知识是 IT 社区的基本原则，促进互相成长，发布的方式参考[[Node.js/npm/如何发布 npm 包|这里]]
+推荐你发布插件到 npm 仓库上，因为这是分享知识是 IT 社区的基本原则，促进互相成长，发布的方式参考[[如何发布 npm 包|这里]]
 
 同时推荐你提交插件到 vite 的[社区](https://github.com/vitejs/awesome-vite#plugins)，各地开发者会在这里寻找适合自己的插件，这是一个很好贡献 vite 生态的机会，提交的流程也很简单，参考[这里](https://github.com/vitejs/awesome-vite/blob/master/.github/pull_request_template.md)
 
