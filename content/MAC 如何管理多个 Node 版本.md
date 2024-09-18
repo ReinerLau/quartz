@@ -67,3 +67,10 @@ export NVM_NODEJS_ORG_MIRROR=https://npmmirror.com/mirrors/node
 nvm ls-remote
 ```
 
+> 每次重新打开 IDE, node 就会切换到最低版本
+
+改变默认版本
+
+```sh
+nvm alias default <版本号>
+```
