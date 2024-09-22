@@ -185,3 +185,29 @@ vue 组件通常是可以复用的 - 每次使用组件都会创建新的组件�
 - history
 	- **URL**: 不带 `#` 号
 	- 原理: 利用 HTML5 的 history API (即 `pushState` 和 `replaceState`) 改变历史记录和 URL, 不会重新刷新页面
+
+## 路由有哪些导航守卫
+
+- 开始导航
+      - 当前离开路由对应组件失活：组件内守卫 `beforeRouteLeave`
+      - 全局前置守卫 `beforeEach`
+      - 当前进入路由复用了组件：组件内守卫 `beforeRouteUpdate`
+      - 路由独享守卫 `beforeEnter`
+- 导航确认前
+      - 解析异步路由组件：组件内守卫 `beforeRouteEnter`
+      - 全局解析守卫 `beforeRouteResolve`
+- 导航确认后：全局后置钩子 `afterEach`
+
+```mermaid
+flowchart TB
+     subgraph 全局前置守卫
+     beforeRouteLeave
+     end
+     subgraph 全局解析守卫
+     beforeRouteEnter
+     end
+     全局前置守卫-->beforeRouteUpdate
+     beforeRouteUpdate-->路由独享守卫
+     路由独享守卫-->全局解析守卫
+     全局解析守卫-->全局后置钩子
+```
