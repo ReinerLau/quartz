@@ -151,7 +151,7 @@ title: 定位
     - flex
         - flex-grow：项目占用剩余空间比例
         - flex-shrink：项目吸收溢出空间比例
-        - flex-basis：项目初始占用空间，决定了如何计算剩余空间
+        - flex-basis：项目占用剩余空间的初始大小
     - align-self：项目自身对齐方式
 
 # display
